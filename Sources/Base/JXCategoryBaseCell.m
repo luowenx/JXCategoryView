@@ -17,8 +17,6 @@
 
 @implementation JXCategoryBaseCell
 
-#pragma mark - Initialize
-
 - (void)dealloc {
     [self.animator stop];
 }
@@ -45,8 +43,6 @@
     return self;
 }
 
-#pragma mark - Public
-
 - (void)initializeViews {
     _animationBlockArray = [NSMutableArray array];
 
@@ -60,7 +56,7 @@
     if (cellModel.isSelectedAnimationEnabled) {
         [self.animationBlockArray removeLastObject];
         if ([self checkCanStartSelectedAnimation:cellModel]) {
-            self.animator = [[JXCategoryViewAnimator alloc] init];
+            _animator = [[JXCategoryViewAnimator alloc] init];
             self.animator.duration = cellModel.selectedAnimationDuration;
         } else {
             [self.animator stop];
@@ -79,7 +75,7 @@
 
 - (void)startSelectedAnimationIfNeeded:(JXCategoryBaseCellModel *)cellModel {
     if (cellModel.isSelectedAnimationEnabled && [self checkCanStartSelectedAnimation:cellModel]) {
-        // 需要更新 isTransitionAnimating，用于处理在过滤时，禁止响应点击，避免界面异常。
+        //需要更新isTransitionAnimating，用于处理在过滤时，禁止响应点击，避免界面异常。
         cellModel.transitionAnimating = YES;
         __weak typeof(self)weakSelf = self;
         self.animator.progressCallback = ^(CGFloat percent) {

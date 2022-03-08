@@ -27,6 +27,9 @@
 
 @property (nonatomic, strong) NSArray <NSString *>*titles;
 
+//是否显示小圆点 0 隐藏   1 显示
+@property (nonatomic, strong) NSArray <NSString *>*showBadgeArr;
+
 @property (nonatomic, assign) NSInteger titleNumberOfLines; //默认：1
 
 @property (nonatomic, strong) UIColor *titleColor;      //默认：[UIColor blackColor]

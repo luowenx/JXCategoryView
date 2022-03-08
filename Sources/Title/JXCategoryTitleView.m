@@ -36,6 +36,17 @@
     return self.titleFont;
 }
 
+- (void)setShowBadgeArr:(NSArray<NSString *> *)showBadgeArr{
+    _showBadgeArr = showBadgeArr;
+    for (int i = 0; i < self.dataSource.count; i++) {
+        [self refreshCellModel:self.dataSource[i] index:i];
+    }
+    
+    [self.collectionView reloadData];
+    
+    
+}
+
 #pragma mark - Override
 
 - (Class)preferredCellClass {
@@ -135,6 +146,9 @@
 
     JXCategoryTitleCellModel *model = (JXCategoryTitleCellModel *)cellModel;
     model.title = self.titles[index];
+    if (_showBadgeArr) {
+        model.showBadge = self.showBadgeArr[index];
+    }
     model.titleNumberOfLines = self.titleNumberOfLines;
     model.titleFont = self.titleFont;
     model.titleSelectedFont = self.titleSelectedFont;

@@ -31,6 +31,18 @@
 
     self.titleLabelCenterX = [self.titleLabel.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor constant:0];
     self.titleLabelCenterY = [self.titleLabel.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor constant:0];
+    
+    _titleBadgeView = [[UIView alloc] init];
+    self.titleBadgeView.backgroundColor = UIColor.redColor;;
+    self.titleBadgeView.clipsToBounds = true;
+    self.titleBadgeView.layer.cornerRadius = 2.5;
+    self.titleBadgeView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.contentView addSubview:self.titleBadgeView];
+    NSLayoutConstraint * badgeTop = [self.titleBadgeView.topAnchor constraintEqualToAnchor:self.titleLabel.topAnchor constant:-2.5];
+    NSLayoutConstraint * badgeRight  = [self.titleBadgeView.rightAnchor constraintEqualToAnchor:self.titleLabel.rightAnchor constant:0];
+    
+    NSLayoutConstraint * badgeWidth = [self.titleBadgeView.widthAnchor constraintEqualToConstant:5];
+    NSLayoutConstraint * badgeHeight = [self.titleBadgeView.heightAnchor constraintEqualToConstant:5];
 
     _titleMaskLayer = [CALayer layer];
     self.titleMaskLayer.backgroundColor = [UIColor redColor].CGColor;
@@ -48,13 +60,18 @@
     self.maskTitleMaskLayer.backgroundColor = [UIColor redColor].CGColor;
     self.maskTitleLabel.layer.mask = self.maskTitleMaskLayer;
 
-    [NSLayoutConstraint activateConstraints:@[self.titleLabelCenterX, self.titleLabelCenterY, self.maskTitleLabelCenterX, self.maskTitleLabelCenterY]];
+    [NSLayoutConstraint activateConstraints:@[self.titleLabelCenterX, self.titleLabelCenterY, self.maskTitleLabelCenterX, self.maskTitleLabelCenterY,badgeTop,badgeRight,badgeWidth,badgeHeight]];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
 
     JXCategoryTitleCellModel *myCellModel = (JXCategoryTitleCellModel *)self.cellModel;
+    if (myCellModel.showBadge && [myCellModel.showBadge isEqualToString:@"1"]) {
+        self.titleBadgeView.hidden = false;
+    }else{
+        self.titleBadgeView.hidden = true;
+    }
     switch (myCellModel.titleLabelAnchorPointStyle) {
         case JXCategoryTitleLabelAnchorPointStyleCenter: {
             self.titleLabel.layer.anchorPoint = CGPointMake(0.5, 0.5);
@@ -182,8 +199,6 @@
     [self startSelectedAnimationIfNeeded:myCellModel];
 }
 
-#pragma mark - Public
-
 - (JXCategoryCellSelectedAnimationBlock)preferredTitleZoomAnimationBlock:(JXCategoryTitleCellModel *)cellModel baseScale:(CGFloat)baseScale {
     __weak typeof(self) weakSelf = self;
     return ^(CGFloat percent) {
@@ -229,5 +244,6 @@
         weakSelf.titleLabel.textColor = cellModel.titleCurrentColor;
     };
 }
+
 
 @end
